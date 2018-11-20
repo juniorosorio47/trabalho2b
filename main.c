@@ -9,6 +9,7 @@
 //Informacoes do paciente
 typedef struct paciente{
 	int ativo;
+	int id;
     char nome[50];
     char endereco[100];
     int telefone;
@@ -30,6 +31,7 @@ typedef struct dentista{
 //Informacoes dos materiais
 typedef struct material{
 	int ativo;
+	int id;
     char nome[50];
     char descricao[100];
     char tipoMaterial[50];
@@ -201,8 +203,8 @@ int main(){
 //Cadastros-----------------------------------------------------------------------------------------------------------
 
 void cadastrarDentista(){
-	Dentista dentistas[100]; 
 	FILE* arquivo;
+	Dentista dentistas[100];
 	int CRO;
     char nome[50];
     char endereco[100];
@@ -257,7 +259,8 @@ void cadastrarDentista(){
 	
 }
 void cadastrarPaciente(){
-	
+	FILE* arquivo;
+	Paciente pacientes[100];
 	int ativo;
     char nome[50];
     char endereco[100];
@@ -266,48 +269,58 @@ void cadastrarPaciente(){
     char nomeResponsavel[50];
     int telefoneResponsavel;
     int i, escolha;
+
+	arquivo = fopen("pacientes.txt", "ab");
+
+	if(arquivo==NULL){
+		printf("Não foi possível abrir o arquivo\n");
+	}else{
     
-    do{
-    	system("cls");
-    	
-		printf("\nDigite o nome do paciente:\n");
-		getchar();
-    	fgets(nome, sizeof(nome), stdin);
-  
+		do{
+			system("cls");
+			
+			printf("\nDigite o nome do paciente:\n");
+			getchar();
+			fgets(nome, sizeof(nome), stdin);
+	
 
-    	printf("\nDigite o nome do responsavel pelo paciente:\n");
-    	fgets(nomeResponsavel, sizeof(nomeResponsavel), stdin);
-    	
-    	printf("\nDigite o endereco do paciente:\n");
-    	fgets(endereco, sizeof(endereco), stdin);
-    	
-    	printf("\nDigite o telefone do paciente:\n");
-    	fflush(stdin);
-    	scanf("%d", &telefone);
-    	
-    	printf("\nDigite o telefone do responsavel pelo paciente:\n");
-    	fflush(stdin);
-    	scanf("%d", &telefoneResponsavel);
-    	
-    	printf("\nDigite a data de nascimento do paciente:\n");
-    	fflush(stdin);
-    	scanf("%d", &dataNascimento);
+			printf("\nDigite o nome do responsavel pelo paciente:\n");
+			fgets(nomeResponsavel, sizeof(nomeResponsavel), stdin);
+			
+			printf("\nDigite o endereco do paciente:\n");
+			fgets(endereco, sizeof(endereco), stdin);
+			
+			printf("\nDigite o telefone do paciente:\n");
+			fflush(stdin);
+			scanf("%d", &telefone);
+			
+			printf("\nDigite o telefone do responsavel pelo paciente:\n");
+			fflush(stdin);
+			scanf("%d", &telefoneResponsavel);
+			
+			printf("\nDigite a data de nascimento do paciente:\n");
+			fflush(stdin);
+			scanf("%d", &dataNascimento);
 
-		strcpy(pacientes[contadorPaciente].nome, nome);
-		strcpy(pacientes[contadorPaciente].nomeResponsavel, nomeResponsavel);
-		strcpy(pacientes[contadorPaciente].endereco, endereco);
-		pacientes[contadorPaciente].telefone = telefone;
-		pacientes[contadorPaciente].telefoneResponsavel = telefoneResponsavel;
-		pacientes[contadorPaciente].dataNascimento = dataNascimento;
-		pacientes[contadorPaciente].ativo = 1;
-		contadorPaciente++;
-    	
-    	getchar();
-    	printf("\nDigite 1 para Cadastrar mais Pacientes.");
-    	printf("\nDigite 0 para Sair.\n");
-    		fflush(stdin);
-    	scanf("%d", &escolha);
-	}while(escolha!=0);
+			strcpy(pacientes[contadorPaciente].nome, nome);
+			strcpy(pacientes[contadorPaciente].nomeResponsavel, nomeResponsavel);
+			strcpy(pacientes[contadorPaciente].endereco, endereco);
+			pacientes[contadorPaciente].telefone = telefone;
+			pacientes[contadorPaciente].telefoneResponsavel = telefoneResponsavel;
+			pacientes[contadorPaciente].dataNascimento = dataNascimento;
+			pacientes[contadorPaciente].ativo = 1;
+			contadorPaciente++;
+
+			fwrite(&pacientes, sizeof(pacientes), 1, arquivo);
+			
+			getchar();
+			printf("\nDigite 1 para Cadastrar mais Pacientes.");
+			printf("\nDigite 0 para Sair.\n");
+				fflush(stdin);
+			scanf("%d", &escolha);
+		}while(escolha!=0);
+		fclose(arquivo);
+	}
 	
 }
 void cadastrarMaterial(){
